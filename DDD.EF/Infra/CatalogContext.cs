@@ -28,6 +28,7 @@ namespace DDD.EF.Infra
 
         public DbSet<ProductGroup> ProductGroups { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,8 +38,34 @@ namespace DDD.EF.Infra
             modelBuilder.HasSequence<int>("ProductId", DEFAULT_SCHEMA)
                 .IncrementsBy(5);
 
+            modelBuilder.HasSequence<int>("ProductCategoryId", DEFAULT_SCHEMA)
+                .IncrementsBy(5);
+
             modelBuilder.ApplyConfiguration(new ProductGroupConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
+        }
+    }
+
+    public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCategory>
+    {
+        public void Configure(EntityTypeBuilder<ProductCategory> builder)
+        {
+            builder.ToTable("ProductCategory", CatalogContext.DEFAULT_SCHEMA);
+
+            builder.Property(c => c.Identity)
+                .HasColumnName("ProductCategoryId")
+                .IsRequired()
+                .ForSqlServerUseSequenceHiLo("ProductCategoryId", CatalogContext.DEFAULT_SCHEMA);
+
+            builder.HasKey(c => c.Identity);
+
+            builder.Property(c => c.Name)
+                .HasColumnType("nvarchar(100)")
+                .IsRequired();
+
+            //Add unique index to name
+            builder.HasAlternateKey(c => c.Name);
         }
     }
 
@@ -78,6 +105,19 @@ namespace DDD.EF.Infra
             builder.HasOne(p => p.ProductGroup)
                 .WithMany()
                 .HasForeignKey("ProductGroupId");
+
+            //builder.Property(p => p.DateCreated)
+            //    .HasColumnType("datetime")
+            //    .HasDefaultValueSql("getdate()");
+            builder.Property(p => p.DateCreated)
+                .HasColumnType("datetime");
+
+            //builder.Property(p => p.Description)
+            //    .HasColumnType("nvarchar(max)")
+            //    .IsRequired(true)
+            //    .HasDefaultValue("");
+            builder.Property(p => p.Description)
+                .HasColumnType("nvarchar(max)");
         }
     }
 

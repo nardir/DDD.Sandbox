@@ -30,13 +30,17 @@ namespace DDD.EF.Models
         public string Name { get; private set; }
         public decimal? ListPrice { get; private set; }
 
+        public DateTime DateCreated { get; private set; }
+
+        public string Description { get; private set; }
+
         public ProductGroup ProductGroup { get; private set; }
 
         protected Product()
         {
         }
 
-        protected Product(ProductGroup productGroup, string name, decimal? listPrice): this()
+        protected Product(ProductGroup productGroup, string name, decimal? listPrice, string description): this()
         {
             if (productGroup == null)
                 throw new ArgumentNullException(nameof(productGroup));
@@ -47,11 +51,13 @@ namespace DDD.EF.Models
             ProductGroup = productGroup;
             Name = name;
             ListPrice = listPrice;
+            DateCreated = DateTime.Now;
+            Description = description;
         }
 
-        public static Product Create(ProductGroup productGroup, string name, decimal? listPrice)
+        public static Product Create(ProductGroup productGroup, string name, decimal? listPrice, string description)
         {
-            return new Product(productGroup, name, listPrice);
+            return new Product(productGroup, name, listPrice, description);
         }
     }
 }

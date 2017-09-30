@@ -2,6 +2,7 @@
 using DDD.EF.Models;
 using DDD.Membership;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
@@ -10,10 +11,21 @@ namespace DDD.ConsoleTest
 {
     class Program
     {
+        static IConfiguration Configuration;
+
         static void Main(string[] args)
         {
             try
             {
+                var configBuilder = new ConfigurationBuilder()
+                    .SetBasePath(Environment.CurrentDirectory)
+                    .AddJsonFile("appsettings.json");
+
+                Configuration = configBuilder.Build();
+
+                //var conn = Configuration["ConnectionStrings:DefaultConnection"];
+                var conn = Configuration.GetConnectionString("DefaultConnection");
+
                 TestDI();
             }
             catch (Exception ex)
@@ -28,13 +40,20 @@ namespace DDD.ConsoleTest
             var serviceProvider = new ServiceCollection()
                 .AddDbContext<CatalogContext>(optionsBuilder =>
                 {
-                    optionsBuilder.UseSqlServer(@"Server=(localdb)\ProjectsV13;Database=DDDCatalog;Trusted_Connection=True");
+                    //optionsBuilder.UseSqlServer(@"Server=(localdb)\ProjectsV13;Database=DDDCatalog;Trusted_Connection=True");
+                    optionsBuilder.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]);
                 }
                 //, ServiceLifetime.Transient
                 ).BuildServiceProvider();
 
             var context2 = serviceProvider.GetService<CatalogContext>();
-            
+
+            context2.Database.Migrate();
+
+            var category = ProductCategory.Create("Cutflowers");
+            context2.ProductCategories.Add(category);
+            context2.SaveChanges();
+
             var product2 = context2.Products.Find(2);
             if (product2 != null)
             {
@@ -68,8 +87,8 @@ namespace DDD.ConsoleTest
 
                 var tulip = context.ProductGroups.Where(pg => Microsoft.EntityFrameworkCore.EF.Property<int>(pg, "ProductGroupId") == 3).SingleOrDefault();
 
-                var redBerlin = Product.Create(rosa, "R GR Red Berlin", null);
-                var ajax = Product.Create(tulip, "TU EN AJAX", null);
+                var redBerlin = Product.Create(rosa, "R GR Red Berlin", null, "R GR Red Berlin");
+                var ajax = Product.Create(tulip, "TU EN AJAX", null, "TU EN AJAX");
                 context.Products.Add(redBerlin);
                 context.Products.Add(ajax);
 
