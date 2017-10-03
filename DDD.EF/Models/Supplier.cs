@@ -16,11 +16,12 @@ namespace DDD.EF.Models
                 _Id = value;
 
                 //Create supplierID VO
-                SupplierId = SupplierId.Create(_Id);
+                //SupplierId = SupplierId.Create(_Id);
             }
         }
 
-        public SupplierId SupplierId { get; private set; }
+        //public SupplierId SupplierId { get; private set; }
+        public SupplierId SupplierId => _Id == default(int) ? null : SupplierId.Create(_Id);
 
         public string Name { get; private set; }
 

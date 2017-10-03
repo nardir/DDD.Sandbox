@@ -11,8 +11,8 @@ using System;
 namespace DDD.EF.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    [Migration("20170930142416_ProductCategory")]
-    partial class ProductCategory
+    [Migration("20171003170243_RemoveSupplierTest")]
+    partial class RemoveSupplierTest
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,6 +22,7 @@ namespace DDD.EF.Migrations
                 .HasAnnotation("Relational:Sequence:catalog.ProductCategoryId", "'ProductCategoryId', 'catalog', '1', '5', '', '', 'Int32', 'False'")
                 .HasAnnotation("Relational:Sequence:catalog.ProductGroupId", "'ProductGroupId', 'catalog', '1', '5', '', '', 'Int32', 'False'")
                 .HasAnnotation("Relational:Sequence:catalog.ProductId", "'ProductId', 'catalog', '1', '5', '', '', 'Int32', 'False'")
+                .HasAnnotation("Relational:Sequence:catalog.SupplierId", "'SupplierId', 'catalog', '1', '10', '', '', 'Int32', 'False'")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("DDD.EF.Models.Product", b =>
@@ -94,6 +95,30 @@ namespace DDD.EF.Migrations
                     b.HasAlternateKey("Name");
 
                     b.ToTable("ProductGroup","catalog");
+                });
+
+            modelBuilder.Entity("DDD.EF.Models.Supplier", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("SupplierId")
+                        .HasAnnotation("SqlServer:HiLoSequenceName", "SupplierId")
+                        .HasAnnotation("SqlServer:HiLoSequenceSchema", "catalog")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.SequenceHiLo);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Name");
+
+                    b.ToTable("Supplier","catalog");
                 });
 
             modelBuilder.Entity("DDD.EF.Models.Product", b =>

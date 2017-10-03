@@ -4,24 +4,24 @@ using System.Collections.Generic;
 
 namespace DDD.EF.Migrations
 {
-    public partial class ProductDescription : Migration
+    public partial class RemoveSupplierTest : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Description",
+            migrationBuilder.DropColumn(
+                name: "Test",
                 schema: "catalog",
-                table: "Product",
-                type: "nvarchar(max)",
-                nullable: true);
+                table: "Supplier");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Description",
+            migrationBuilder.AddColumn<string>(
+                name: "Test",
                 schema: "catalog",
-                table: "Product");
+                table: "Supplier",
+                type: "nvarchar(100)",
+                nullable: true);
         }
     }
 }

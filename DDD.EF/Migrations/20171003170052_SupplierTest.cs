@@ -4,25 +4,24 @@ using System.Collections.Generic;
 
 namespace DDD.EF.Migrations
 {
-    public partial class ProductDateCreated : Migration
+    public partial class SupplierTest : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<DateTime>(
-                name: "DateCreated",
+            migrationBuilder.AddColumn<string>(
+                name: "Test",
                 schema: "catalog",
-                table: "Product",
-                type: "datetime",
-                nullable: false,
-                defaultValueSql: "getdate()");
+                table: "Supplier",
+                type: "nvarchar(100)",
+                nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "DateCreated",
+                name: "Test",
                 schema: "catalog",
-                table: "Product");
+                table: "Supplier");
         }
     }
 }

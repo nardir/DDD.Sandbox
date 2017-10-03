@@ -72,6 +72,19 @@ namespace DDD.EF.Infra
                 .HasColumnType("nvarchar(100)");
 
             builder.HasAlternateKey(s => s.Name);
+
+            builder.Property<byte[]>("Timestamp")
+                .ValueGeneratedOnAddOrUpdate()
+                .IsConcurrencyToken();
+
+            //builder.Property<byte[]>("Timestamp")
+            //    .ValueGeneratedOnAddOrUpdate()
+            //    .IsRequired()
+            //    .IsConcurrencyToken()
+            //    .HasColumnType("rowversion");
+
+            //builder.Property<string>("Test")
+            //    .HasColumnType("nvarchar(100)");
         }
     }
 

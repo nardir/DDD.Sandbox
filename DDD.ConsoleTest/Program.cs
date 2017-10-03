@@ -26,7 +26,9 @@ namespace DDD.ConsoleTest
                 //var conn = Configuration["ConnectionStrings:DefaultConnection"];
                 var conn = Configuration.GetConnectionString("DefaultConnection");
 
-                TestDI();
+                conn = Configuration.GetConnectionString("MAUI");
+
+                TestDI(conn);
             }
             catch (Exception ex)
             {
@@ -35,13 +37,14 @@ namespace DDD.ConsoleTest
 
         }
 
-        private static void TestDI()
+        private static void TestDI(string conn)
         {
             var serviceProvider = new ServiceCollection()
                 .AddDbContext<CatalogContext>(optionsBuilder =>
                 {
                     //optionsBuilder.UseSqlServer(@"Server=(localdb)\ProjectsV13;Database=DDDCatalog;Trusted_Connection=True");
-                    optionsBuilder.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]);
+                    //optionsBuilder.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]);
+                    optionsBuilder.UseSqlServer(conn);
                 }
                 //, ServiceLifetime.Transient
                 ).BuildServiceProvider();
@@ -50,11 +53,13 @@ namespace DDD.ConsoleTest
 
             context2.Database.Migrate();
 
-            var supplier = Supplier.Create("Copaco");
-            context2.Suppliers.Add(supplier);
-            context2.SaveChanges();
+            //var supplier = Supplier.Create("Copaco");
+            //context2.Suppliers.Add(supplier);
+            //context2.SaveChanges();
 
-            var supplier2 = context2.Suppliers.Find(supplier.SupplierId.Identity);
+            //var supplier2 = context2.Suppliers.Find(supplier.SupplierId.Identity);
+
+            var supplier3 = context2.Suppliers.Where(s => s.Name == "Koolhaas").SingleOrDefault();
 
             var category = ProductCategory.Create("Cutflowers");
             context2.ProductCategories.Add(category);

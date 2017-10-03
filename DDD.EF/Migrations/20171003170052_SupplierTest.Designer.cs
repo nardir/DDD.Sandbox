@@ -11,8 +11,8 @@ using System;
 namespace DDD.EF.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    [Migration("20171003124848_Supplier")]
-    partial class Supplier
+    [Migration("20171003170052_SupplierTest")]
+    partial class SupplierTest
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -109,6 +109,13 @@ namespace DDD.EF.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Test")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<byte[]>("Timestamp")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
 
                     b.HasKey("Id");
 
