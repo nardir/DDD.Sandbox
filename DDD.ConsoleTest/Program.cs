@@ -50,6 +50,12 @@ namespace DDD.ConsoleTest
 
             context2.Database.Migrate();
 
+            var supplier = Supplier.Create("Copaco");
+            context2.Suppliers.Add(supplier);
+            context2.SaveChanges();
+
+            var supplier2 = context2.Suppliers.Find(supplier.SupplierId.Identity);
+
             var category = ProductCategory.Create("Cutflowers");
             context2.ProductCategories.Add(category);
             context2.SaveChanges();

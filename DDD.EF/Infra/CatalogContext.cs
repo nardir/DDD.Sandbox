@@ -29,6 +29,7 @@ namespace DDD.EF.Infra
         public DbSet<ProductGroup> ProductGroups { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,9 +42,36 @@ namespace DDD.EF.Infra
             modelBuilder.HasSequence<int>("ProductCategoryId", DEFAULT_SCHEMA)
                 .IncrementsBy(5);
 
+            modelBuilder.HasSequence<int>("SupplierId", DEFAULT_SCHEMA)
+                .IncrementsBy(10);
+
             modelBuilder.ApplyConfiguration(new ProductGroupConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new SupplierConfiguration());
+        }
+    }
+
+    public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>
+    {
+        public void Configure(EntityTypeBuilder<Supplier> builder)
+        {
+            builder.ToTable("Supplier", CatalogContext.DEFAULT_SCHEMA);
+
+            builder.Property<int>("Id")
+                .HasColumnName("SupplierId")
+                .IsRequired()
+                .ForSqlServerUseSequenceHiLo("SupplierId", CatalogContext.DEFAULT_SCHEMA);
+
+            builder.HasKey("Id");
+
+            builder.Ignore(s => s.SupplierId);
+
+            builder.Property(s => s.Name)
+                .IsRequired()
+                .HasColumnType("nvarchar(100)");
+
+            builder.HasAlternateKey(s => s.Name);
         }
     }
 
@@ -98,7 +126,7 @@ namespace DDD.EF.Infra
                 .IsRequired(false)
                 .HasColumnType("decimal(5,2)");
 
-            builder.Property<int>("ProductGroupId")
+            builder.Property<int>("ProductGroupId")  //Create shadow property first, to use it as a FK
                 .IsRequired();
 
             //builder.Ignore(p => p.ProductGroup);
