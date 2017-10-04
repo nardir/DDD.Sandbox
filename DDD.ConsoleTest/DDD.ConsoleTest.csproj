@@ -6,6 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="3.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
@@ -15,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DDD.EF\DDD.EF.csproj" />
+    <ProjectReference Include="..\DDD.MediatR\DDD.MediatR.csproj" />
     <ProjectReference Include="..\DDD.Membership\DDD.Membership.csproj" />
   </ItemGroup>
 

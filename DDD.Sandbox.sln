@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDD.Domain.Core", "DDD.Doma
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTestProject1", "XUnitTestProject1\XUnitTestProject1.csproj", "{DB10419A-32CC-4944-9926-CE1798C93A51}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DDD.MediatR", "DDD.MediatR\DDD.MediatR.csproj", "{9F6AABCA-6EF8-45BA-B5F5-8CBBAFA96A28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{DB10419A-32CC-4944-9926-CE1798C93A51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB10419A-32CC-4944-9926-CE1798C93A51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB10419A-32CC-4944-9926-CE1798C93A51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F6AABCA-6EF8-45BA-B5F5-8CBBAFA96A28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F6AABCA-6EF8-45BA-B5F5-8CBBAFA96A28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F6AABCA-6EF8-45BA-B5F5-8CBBAFA96A28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F6AABCA-6EF8-45BA-B5F5-8CBBAFA96A28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

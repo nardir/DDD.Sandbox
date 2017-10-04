@@ -1,11 +1,15 @@
 ﻿using DDD.EF.Infra;
 using DDD.EF.Models;
+using DDD.MediatR;
 using DDD.Membership;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using MediatR;
+using FluentValidation;
 
 namespace DDD.ConsoleTest
 {
@@ -28,13 +32,42 @@ namespace DDD.ConsoleTest
 
                 conn = Configuration.GetConnectionString("MAUI");
 
-                TestDI(conn);
+                //TestDI(conn);
+                TestMediatRAsync().GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
 
             }
 
+        }
+
+        private static async Task TestMediatRAsync()
+        {
+            var serviceCollection = new ServiceCollection();
+
+            serviceCollection.AddMediatR(typeof(CreateProductCommand));
+
+            //Type[] validators = new[] { typeof(CreateProductCommandValidator) };
+            serviceCollection.AddTransient(typeof(IValidator<CreateProductCommand>), typeof(CreateProductCommandValidator));
+
+            //serviceCollection.AddTransient(typeof(IPipelineBehavior<CreateProductCommand, bool>), typeof(LoggingBehavior<CreateProductCommand, bool>));
+            serviceCollection.AddTransient(typeof(IPipelineBehavior<CreateProductCommand, bool>), typeof(ValidatorBehavior<CreateProductCommand, bool>));
+            serviceCollection.AddTransient(typeof(IPipelineBehavior<CreateProductCommand, bool>), typeof(LoggingBehavior<CreateProductCommand, bool>));
+
+            var provider = serviceCollection.BuildServiceProvider();
+
+            //IValidator<CreateProductCommand> validator = provider.GetService<IValidator<CreateProductCommand>>();
+            //IValidator<CreateProductCommand>[] validators = provider.GetServices<IValidator<CreateProductCommand>>().ToArray();
+
+            var productGroup = ProductGroup.Create("GE GR");
+            var createProductCommand = new CreateProductCommand(productGroup, "GR GE Annemarie");
+
+            IMediator mediator = provider.GetService<IMediator>();
+
+            var result = await mediator.Send(createProductCommand);
+
+            //await Task.FromResult<object>(null);
         }
 
         private static void TestDI(string conn)
